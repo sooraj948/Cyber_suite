@@ -2,7 +2,7 @@ import sys
 
 def ceasar(s,n):
     t=""
-    s.lower()
+    s=s.lower()
     for i in s:
         if 97<=ord(i)<=122:
             # print((ord(i)-97+n)%26)
@@ -13,7 +13,7 @@ def ceasar(s,n):
 
 def vignere(s,key):
     n=len(key)
-    s.lower()
+    s=s.lower()
     t=""
     for i in range(len(s)):
         if 97<=ord(s[i])<=122:
