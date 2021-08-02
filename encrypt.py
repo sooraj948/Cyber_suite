@@ -15,9 +15,11 @@ def vignere(s,key):
     n=len(key)
     s=s.lower()
     t=""
+    count=0
     for i in range(len(s)):
         if 97<=ord(s[i])<=122:
-            t+=chr((ord(s[i])-97*2+ord(key[i%n]))%26+97)
+            t+=chr((ord(s[i])-97*2+ord(key[count%n]))%26+97)
+            count+=1
         else:
             t+=s[i]
 
@@ -31,11 +33,11 @@ try:
         s=sys.argv[2]
 
         if s=="rot":
-            t=ceasar(sys.argv[4],int(sys.argv[3]))
+            t=ceasar(" ".join(sys.argv[4:]),int(sys.argv[3]))
             print(t)
         if s=="vignere":
             # print(sys.argv[3])
-            t=vignere(sys.argv[4],sys.argv[3])
+            t=vignere(" ".join(sys.argv[4:]),sys.argv[3])
             print(t)
     if option == "-f":
         f=open(sys.argv[4],"r")
@@ -47,7 +49,7 @@ try:
         if s=="vignere":
             t=vignere(a,sys.argv[3])
             print(t)
-    print("Ignoring special characteers and numbers. Also giving in lowercase only")
+    # print("Ignoring special characteers and numbers. Also giving in lowercase only")
 
         
 except Exception as ex:
