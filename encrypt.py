@@ -6,7 +6,7 @@ def ceasar(s,n):
     for i in s:
         if 97<=ord(i)<=122:
             # print((ord(i)-97+n)%26)
-            t+=chr((ord(i)-97+n)%26+97)
+            t+=chr((ord(i)-97+n)%26+97)# this is actual encryption by rotation or movement
         else:
             t+=i
     return t
@@ -19,9 +19,9 @@ def vignere(s,key):
     for i in range(len(s)):
         if 97<=ord(s[i])<=122:
             t+=chr((ord(s[i])-97*2+ord(key[count%n]))%26+97)
-            count+=1
+            count+=1#keeps track of lower case letters . used above
         else:
-            t+=s[i]
+            t+=s[i]#encrypt only letters not special chars
 
     return t
 
@@ -29,17 +29,18 @@ def vignere(s,key):
 
 try:
     option=sys.argv[1]
-    if option=="-s":
+    if option=="-s":#string input
         s=sys.argv[2]
 
         if s=="rot":
-            t=ceasar(" ".join(sys.argv[4:]),int(sys.argv[3]))
+            t=ceasar(" ".join(sys.argv[4:]),int(sys.argv[3]))#.join is to take everything after the key as input not just the first one
             print(t)
         if s=="vignere":
             # print(sys.argv[3])
             t=vignere(" ".join(sys.argv[4:]),sys.argv[3])
             print(t)
-    if option == "-f":
+            
+    if option == "-f":#file input
         f=open(sys.argv[4],"r")
         a=f.read()
         s=sys.argv[2]
