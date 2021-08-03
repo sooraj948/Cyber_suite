@@ -144,7 +144,7 @@ try:
             freq_analysis(" ".join(sys.argv[3:]))
     
     elif option=="-sK" and type=="vignere" :#note K in caps. This is if only key length is known
-        
+        #works best if key length is less than or equal to 6 for moderate size text
         s=" ".join(sys.argv[4:])
         # print("File content:\n"+s+"\n**********************************************")
         

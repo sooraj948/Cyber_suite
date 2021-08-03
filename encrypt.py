@@ -39,10 +39,11 @@ try:
             # print(sys.argv[3])
             t=vignere(" ".join(sys.argv[4:]),sys.argv[3])
             print(t)
-            
+
     if option == "-f":#file input
         f=open(sys.argv[4],"r")
         a=f.read()
+        f.close()
         s=sys.argv[2]
         if s=="rot":
             t=ceasar(a,int(sys.argv[3]))
