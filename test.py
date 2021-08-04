@@ -13,7 +13,8 @@ app = Flask(__name__)
 def connect():
     conn = sqlite3.connect(':memory:', check_same_thread=False)
     c = conn.cursor()
-    c.execute("CREATE TABLE users (username TEXT, password TEXT, rank TEXT)")
+    a="CREATE TABLE users (username TEXT, password TEXT, rank TEXT)"
+    c.execute(a)
     c.execute("INSERT INTO users VALUES ('admin', 'e1568c571e684e0fb1724da85d215dc0', 'admin')")
     c.execute("INSERT INTO users VALUES ('bob', '2b903105b59299c12d6c1e2ac8016941', 'user')")
     c.execute("INSERT INTO users VALUES ('alice', 'd8578edf8458ce06fbc5bb76a58c5ca4', 'moderator')")
@@ -37,7 +38,7 @@ def login():
     md5 = hashlib.new('md5', password.encode('utf-8'))
     password = md5.hexdigest()
     c = CONNECTION.cursor()
-    c.execute("SELECT * FROM users WHERE username = ? and password = ?", (username, password))
+    c.execute("SELECT * FROM users WHERE username = ? and password = ? and rank= ?", (username, password))#parameterised/tuple in ast. Not sql vulnerable
     data = c.fetchone()
     if data is None:
         return 'Incorrect username and password.'
@@ -51,8 +52,15 @@ def list_users():
     if rank == 'admin':
         return "Can't list admins!"
     c = CONNECTION.cursor()
-    # c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))
-    c.execute("SELECT username, rank FROM users WHERE rank = %s",rank)
+    a="SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
+    b="SELECT username, rank FROM users WHERE rank = %s" %rank
+    c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
+    c.execute("SELECT username, rank FROM users WHERE rank = %s" %rank)#binop
+    c.execute(a)#name
+    c.execute("SELECT username, rank FROM users WHERE rank = "+rank)#binop
+
+    c.execute("SELECT username, rank FROM users WHERE rank = '%s'", (rank,))#parameterised/tuple in ast. Not sql vulnerable
+    # c.execute("SELECT * FROM TEST WHERE ID = '%s'" % id)
     data = c.fetchall()
     return str(data)
 
