@@ -1,6 +1,11 @@
 
 # a=1+1
 # print(a)
+# def genstr():
+#     return "asdf"
+# a="SELECT username, rank FROM users WHERE rank = %s" %genstr()
+
+
 #https://rushter.com/blog/detecting-sql-injections-in-python/
 import sqlite3
 import hashlib
@@ -38,7 +43,8 @@ def login():
     md5 = hashlib.new('md5', password.encode('utf-8'))
     password = md5.hexdigest()
     c = CONNECTION.cursor()
-    c.execute("SELECT * FROM users WHERE username = ? and password = ? and rank= ?", (username, password))#parameterised/tuple in ast. Not sql vulnerable
+    rank="admin"
+    c.execute("SELECT * FROM users WHERE username = ? and password = ?", (username, password))#parameterised/tuple in ast. Not sql vulnerable
     data = c.fetchone()
     if data is None:
         return 'Incorrect username and password.'
@@ -52,15 +58,25 @@ def list_users():
     if rank == 'admin':
         return "Can't list admins!"
     c = CONNECTION.cursor()
-    # a="SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
-    a="SELECT username, rank FROM users WHERE rank = %s" %rank
+    a="SELECT username, rank FROM users WHERE rank = '{0}'".format(str(rank))
+    # a="SELECT username, rank FROM users WHERE rank = admin" 
     b=a
+    def genstr():
+        return "asdf"
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
+    c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format("user"))#call
+    c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %rank  %rank)#binop
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %rank)#binop
+    c.execute("SELECT username, rank FROM users WHERE rank = %s" %genstr())#binop. False positive
     c.execute(b)#name
     c.execute("SELECT username, rank FROM users WHERE rank = "+rank)#binop
 
     c.execute("SELECT username, rank FROM users WHERE rank = '%s'", (rank,))#parameterised/tuple in ast. Not sql vulnerable
+    c.execute("insert into user(username, password)"
+         "  values('{0}', '{1}')".format(username, password))#https://stackoverflow.com/questions/29528511/python-sqlite3-sql-injection-vulnerable-code
+    sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
+
+    c.execute(sql, ('webmaster@python.org',))#https://github.com/PyMySQL/PyMySQL
     # c.execute("SELECT * FROM TEST WHERE ID = '%s'" % id)
     data = c.fetchall()
     return str(data)

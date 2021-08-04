@@ -1,4 +1,5 @@
 import ast
+import sys
 #https://pybit.es/articles/ast-intro/
 # test_code=open("test.py","r").read()
 
@@ -36,6 +37,8 @@ import ast
 # a=FuncLister()
 # a.visit(tree)
 
+
+
 def create_ast(file):
     test_code=open(file,"r").read()
 
@@ -48,7 +51,7 @@ def find_vuln_nodes(tree,l):#also gives Names which are not sqli vuln
     for node in ast.walk(tree):
         if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute):
              
-            if node.func.attr=="execute":
+            if node.func.attr=="execute" or node.func.attr=="executemany":
                 for i in node.args:
                     # print(i)
                     # if isinstance(i , ast.Call) or isinstance(i,ast.BinOp) or isinstance(i,ast.Name):
@@ -56,20 +59,7 @@ def find_vuln_nodes(tree,l):#also gives Names which are not sqli vuln
                     #     l.append(i)
                     if check(i,tree):
                         l.append(node)
-                    # if isinstance(i , ast.Call) and isinstance(i.func,ast.Attribute) and i.func.attr=="format" :
-                    #     # print(i.func)
-                    #     l.append(node)
-
-                    # elif isinstance(i,ast.BinOp) and (isinstance(i.op,ast.Mod) or isinstance(i.op,ast.Add)):
-                    #     l.append(node)
-
-                    # elif isinstance(i,ast.Name):
-                    #     # print("in finding vul nodes fn:",i,i.lineno)
-                    #     # print(check_new(i,tree,i.lineno))
-                    #     res=check_name(i,tree,i.lineno)
-                    #     print("res value is ",res.value)
-                    #     if check(res.value):
-                    #         l.append(node)
+                    
                         
 
 
@@ -97,7 +87,7 @@ def check_name(node,tree,lineno):
     for some in ast.walk(tree):
         # if some.lineno==lineno:
         #     break
-        if isinstance(some,ast.Assign) and some.lineno< lineno:
+        if isinstance(some,ast.Assign) and some.lineno< lineno:# for most recent assignment of that value
 
             for i in some.targets:
                 if i.id==node.id:
@@ -107,16 +97,27 @@ def check_name(node,tree,lineno):
     return res
 
 def check(i,tree):
+
     if isinstance(i , ast.Call) and isinstance(i.func,ast.Attribute) and i.func.attr=="format" :
-        return True
+        # print(i)
+        for j in i.args:
+            #to avoid those where of the form .format(int()) or....bcz these are not sqli vuln. 
+                #They will o/p error if we try to put " or # or --
+            if isinstance(j,ast.Name):
+                return True
+            elif isinstance(j,ast.Call):
+                if isinstance(j.func,ast.Name) and j.func.id=="str":
+                    return True
+                # print("Just testing",j.lineno,j.func.id)
+            
+
     elif isinstance(i,ast.BinOp) and (isinstance(i.op,ast.Mod) or isinstance(i.op,ast.Add)):
         return True
+
     elif isinstance(i,ast.Name):
-        # print("in finding vul nodes fn:",i,i.lineno)
-        # print(check_new(i,tree,i.lineno))
         res=check_name(i,tree,i.lineno)
-        print("res value is ",res.value)
-        if check(res.value):
+        # print("res value is ",res.value)
+        if check(res.value,tree):
             return True
     
 
@@ -129,19 +130,20 @@ def check(i,tree):
 
 
 if __name__=="__main__":
-    tree=create_ast("test.py")
+    try:
+        file=sys.argv[1]
+        tree=create_ast(file)
 
-    l=find_vuln_nodes(tree,[])
-    # print("Vuln nodes:",l)
-    for i in l:
-        print(i.lineno,i)
+        l=find_vuln_nodes(tree,[])
 
-    # check_assigns(tree)
-
-    # for i in l:
-    #     if isinstance(i,ast.Name):
-    #         print(i.id)
-
+        for i in l:
+            print(i.lineno,i)
+        # rank="baseuser' or 1=1--"
+        # a="SELECT username, rank FROM users WHERE rank = '{0}'".format(str(rank))
+        # print(a)
+    except IndexError:
+        print("Usage: python3 sqli.py <filename>.py")
+    
 
 
 
