@@ -52,11 +52,12 @@ def list_users():
     if rank == 'admin':
         return "Can't list admins!"
     c = CONNECTION.cursor()
-    a="SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
-    b="SELECT username, rank FROM users WHERE rank = %s" %rank
+    # a="SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
+    a="SELECT username, rank FROM users WHERE rank = %s" %rank
+    b=a
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %rank)#binop
-    c.execute(a)#name
+    c.execute(b)#name
     c.execute("SELECT username, rank FROM users WHERE rank = "+rank)#binop
 
     c.execute("SELECT username, rank FROM users WHERE rank = '%s'", (rank,))#parameterised/tuple in ast. Not sql vulnerable
