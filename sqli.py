@@ -50,30 +50,63 @@ def find_vuln_nodes(tree,l):#also gives Names which are not sqli vuln
              
             if node.func.attr=="execute":
                 for i in node.args:
-                    print(i)
-                    if isinstance(i , ast.Call) or isinstance(i,ast.BinOp) or isinstance(i,ast.Name):
+                    # print(i)
+                    # if isinstance(i , ast.Call) or isinstance(i,ast.BinOp) or isinstance(i,ast.Name):
 
-                        l.append(i)
+                    #     l.append(i)
+                    if isinstance(i , ast.Call) and isinstance(i.func,ast.Attribute) and i.func.attr=="format" :
+                        # print(i.func)
+                        l.append(node)
+
+                    elif isinstance(i,ast.BinOp) and (isinstance(i.op,ast.Mod) or isinstance(i.op,ast.Add)):
+                        l.append(node)
+
+                    elif isinstance(i,ast.Name):
+                        print("in finding vul nodes fn:",i,i.lineno)
+                        print(check_new(i,tree,i.lineno))
+
+
+
+                    
+
 
 
     return l
 
 def check_assigns(tree):
     for node in ast.walk(tree):
+
         if isinstance(node,ast.Assign):
-            # print(node.lineno,node.value)
-            if isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Attribute) and node.value.func.attr=="format":
-                print(node.lineno,node.value.func.attr)
-            elif isinstance(node.value,ast.BinOp):
-                print(node.lineno,node.value.op)
+            print(node.lineno,node.value)
+            # if isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Attribute) and node.value.func.attr=="format":
+            #     print(node.lineno,node.value.func.attr)
+            # elif isinstance(node.value,ast.BinOp):#+ and %
+            #     print(node.lineno,node.value.op)
+
+def check_new(node,tree,lineno):
+    
+    for some in ast.walk(tree):
+        # if some.lineno==lineno:
+        #     break
+        if isinstance(some,ast.Assign):
+
+            for i in some.targets:
+                if i.id==node.id:
+                    res=some
+
+    print("res is ",res, res.lineno)
+    
+
 
 if __name__=="__main__":
     tree=create_ast("test.py")
 
-    # l=find_vuln_nodes(tree,[])
+    l=find_vuln_nodes(tree,[])
     # print("Vuln nodes:",l)
+    # for i in l:
+    #     print(i.lineno,i)
 
-    check_assigns(tree)
+    # check_assigns(tree)
 
     # for i in l:
     #     if isinstance(i,ast.Name):
