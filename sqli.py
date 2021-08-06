@@ -6,39 +6,11 @@ import sys
 # tree=ast.parse(test_code)
 #print(ast.dump(tree))
 
-# print(node.__getattribute__("execute"))
-# print(type(node))
-# print(ast.dump(ast.parse('123', mode='eval')))
-# 
-# print(ast.walk(node))
-# for node in ast.walk(tree):
-#     if node.__class__.__name__=="Call":
-
-#         if (isinstance(node.func,ast.Attribute)): 
-#             # print(node.func.attr)
-#             if node.func.attr=="execute" and len(node.args)>0: #and isinstance(node.args[0],ast.Call) :
-#                 # for i in node.args:
-#                 #     print(i.lineno,i.__class__)
-#                 print(node.lineno,node.args)
-                # print((node.args[0].value))
-        # print(node.func.value.id)
-    # print(node.__class__)
-# print()
-# for node in ast.iter_child_nodes(tree):
-#     print(node.__class__.__name__)
-# print()
-# for name, value in ast.iter_fields(tree):
-#     print(name, value)
-
-
-# class FuncLister(ast.NodeVisitor):
-#     def visit_FunctionDef(self, node):
-#         print(node.__class__)
-#         self.generic_visit(node)
-
-# a=FuncLister()
-# a.visit(tree)
-
+#in code here i am assuming the only reason to pass a variable to a formatted or f-string is if it is being taken as
+#input and hence it might be sql injection vulnerable.
+#eg: c.execute("select .... where user={}".format(user))
+#in this eg i am assuming 'user' is being input from somewhere(web or cmd line or anything) and not checking for it.
+#bcz if 'user' is known what is the point of using a variable and using formatting?
 
 
 def create_ast(file):
@@ -104,14 +76,21 @@ def check(i,tree):
                 if isinstance(j.func,ast.Name) and j.func.id=="str":   
                     return True
                 
-                return check(j,tree)
+                if check(j,tree):
+                    return True
                 # print("Just testing",j.lineno,j.func.id)
             
 
     elif isinstance(i,ast.BinOp) and (isinstance(i.op,ast.Mod) or isinstance(i.op,ast.Add)):
         # print("right is ",i.right,i.lineno)
-        if isinstance(i.right,ast.Name) or isinstance(i.right,ast.Tuple) :
+        if isinstance(i.right,ast.Name) :
             return True
+
+        elif isinstance(i.right,ast.Tuple):
+            for j in i.right.elts:
+
+                if check(j,tree) or isinstance(j,ast.Name):
+                    return True
 
         return check(i.right,tree)
 
@@ -136,7 +115,7 @@ def check(i,tree):
                 if isinstance(j.value,ast.Name):
                     return True
                 elif isinstance(j.value,ast.Call):
-                    print(j.lineno,j.value.func)
+                    # print(j.lineno,j.value.func)
                     if check(j.value,tree):
                         return True
                      

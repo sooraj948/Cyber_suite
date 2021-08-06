@@ -63,12 +63,12 @@ def list_users():
     a="SELECT username, rank FROM users WHERE rank = '{0}'".format(str(rank))
     # a="SELECT username, rank FROM users WHERE rank = admin" 
     b=a
-    def genstr(rank):
+    def genstr(rank="admin"):
         # return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
         return  "asdf"
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format("user"))#call
-    c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %(rank,rank))#binop
+    c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %(genstr(),rank))#binop
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %rank)#binop
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %genstr())#binop. but depends on func. cannot blindly say sqli vuln
     c.execute(b)#name
@@ -80,7 +80,7 @@ def list_users():
 
     c.execute("SELECT username, rank FROM users WHERE rank = '%s'", (rank,))#parameterised/tuple in ast. Not sql vulnerable
     c.execute("insert into user(username, password)"
-         "  values('{0}', '{1}')".format(username, password))#https://stackoverflow.com/questions/29528511/python-sqlite3-sql-injection-vulnerable-code
+         "  values('{0}', '{1}')".format(genstr(rank), password))#https://stackoverflow.com/questions/29528511/python-sqlite3-sql-injection-vulnerable-code
     sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
 
     c.execute(sql, ('webmaster@python.org',))#https://github.com/PyMySQL/PyMySQL
