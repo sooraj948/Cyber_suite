@@ -64,16 +64,19 @@ def list_users():
     # a="SELECT username, rank FROM users WHERE rank = admin" 
     b=a
     def genstr(rank):
-        return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
-        # return  "asdf"
+        # return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
+        return  "asdf"
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format("user"))#call
-    c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %rank  %rank)#binop
+    c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %(rank,rank))#binop
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %rank)#binop
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %genstr())#binop. but depends on func. cannot blindly say sqli vuln
     c.execute(b)#name
     c.execute("SELECT username, rank FROM users WHERE rank = "+rank)#binop
     c.execute(genstr(rank))
+    c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(genstr(rank)))
+    c.execute(f"SELECT username, rank FROM users WHERE rank = {rank}")
+    c.execute(f"SELECT username, rank FROM users WHERE rank = {genstr(rank)} or rank={rank}")
 
     c.execute("SELECT username, rank FROM users WHERE rank = '%s'", (rank,))#parameterised/tuple in ast. Not sql vulnerable
     c.execute("insert into user(username, password)"

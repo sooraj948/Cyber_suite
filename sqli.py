@@ -103,12 +103,14 @@ def check(i,tree):
             elif isinstance(j,ast.Call):
                 if isinstance(j.func,ast.Name) and j.func.id=="str":   
                     return True
+                
+                return check(j,tree)
                 # print("Just testing",j.lineno,j.func.id)
             
 
     elif isinstance(i,ast.BinOp) and (isinstance(i.op,ast.Mod) or isinstance(i.op,ast.Add)):
         # print("right is ",i.right,i.lineno)
-        if isinstance(i.right,ast.Name):
+        if isinstance(i.right,ast.Name) or isinstance(i.right,ast.Tuple) :
             return True
 
         return check(i.right,tree)
@@ -125,6 +127,19 @@ def check(i,tree):
         # print(node.body)
         ret_obj=node.body[-1]
         return check(ret_obj.value,tree)
+
+    elif isinstance(i , ast.JoinedStr):
+        # print(i.lineno,i)
+        for j in i.values:
+            if isinstance(j,ast.FormattedValue):
+
+                if isinstance(j.value,ast.Name):
+                    return True
+                elif isinstance(j.value,ast.Call):
+                    print(j.lineno,j.value.func)
+                    if check(j.value,tree):
+                        return True
+                     
 
     
 
