@@ -4,10 +4,12 @@ import sys
 # test_code=open("test.py","r").read()
 
 # tree=ast.parse(test_code)
+#print(ast.dump(tree))
+
 # print(node.__getattribute__("execute"))
 # print(type(node))
 # print(ast.dump(ast.parse('123', mode='eval')))
-# print(ast.dump(tree))
+# 
 # print(ast.walk(node))
 # for node in ast.walk(tree):
 #     if node.__class__.__name__=="Call":
@@ -60,27 +62,20 @@ def find_vuln_nodes(tree,l):#also gives Names which are not sqli vuln
                     if check(i,tree):
                         l.append(node)
                     
-                        
-
-
-
-
-
-                    
-
-
+     
 
     return l
 
-# def check_assigns(tree):
-#     for node in ast.walk(tree):
 
-#         if isinstance(node,ast.Assign):
-#             print(node.lineno,node.value)
-            # if isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Attribute) and node.value.func.attr=="format":
-            #     print(node.lineno,node.value.func.attr)
-            # elif isinstance(node.value,ast.BinOp):#+ and %
-            #     print(node.lineno,node.value.op)
+def find_func(func_name,tree):
+
+    for node in ast.walk(tree):
+
+        if isinstance(node,ast.FunctionDef) and node.name==func_name:
+
+            return node
+
+
 
 def check_name(node,tree,lineno):
     
@@ -97,7 +92,7 @@ def check_name(node,tree,lineno):
     return res
 
 def check(i,tree):
-
+    # print(i.lineno,i)
     if isinstance(i , ast.Call) and isinstance(i.func,ast.Attribute) and i.func.attr=="format" :
         # print(i)
         for j in i.args:
@@ -106,19 +101,31 @@ def check(i,tree):
             if isinstance(j,ast.Name):
                 return True
             elif isinstance(j,ast.Call):
-                if isinstance(j.func,ast.Name) and j.func.id=="str":
+                if isinstance(j.func,ast.Name) and j.func.id=="str":   
                     return True
                 # print("Just testing",j.lineno,j.func.id)
             
 
     elif isinstance(i,ast.BinOp) and (isinstance(i.op,ast.Mod) or isinstance(i.op,ast.Add)):
-        return True
+        # print("right is ",i.right,i.lineno)
+        if isinstance(i.right,ast.Name):
+            return True
+
+        return check(i.right,tree)
 
     elif isinstance(i,ast.Name):
         res=check_name(i,tree,i.lineno)
         # print("res value is ",res.value)
         if check(res.value,tree):
             return True
+
+    elif isinstance(i , ast.Call) and isinstance(i.func,ast.Name):
+
+        node=find_func(i.func.id,tree)
+        # print(node.body)
+        ret_obj=node.body[-1]
+        return check(ret_obj.value,tree)
+
     
 
     

@@ -1,9 +1,11 @@
 
-# a=1+1
-# print(a)
-# def genstr():
-#     return "asdf"
-# a="SELECT username, rank FROM users WHERE rank = %s" %genstr()
+# # a=1+1
+# # print(a)
+# def genstr(rank):
+    
+#     return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
+# # a="SELECT username, rank FROM users WHERE rank = %s" %genstr()
+# c.execute(genstr(rank))
 
 
 #https://rushter.com/blog/detecting-sql-injections-in-python/
@@ -61,15 +63,17 @@ def list_users():
     a="SELECT username, rank FROM users WHERE rank = '{0}'".format(str(rank))
     # a="SELECT username, rank FROM users WHERE rank = admin" 
     b=a
-    def genstr():
-        return "asdf"
+    def genstr(rank):
+        return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
+        # return  "asdf"
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format("user"))#call
     c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %rank  %rank)#binop
     c.execute("SELECT username, rank FROM users WHERE rank = %s" %rank)#binop
-    c.execute("SELECT username, rank FROM users WHERE rank = %s" %genstr())#binop. False positive
+    c.execute("SELECT username, rank FROM users WHERE rank = %s" %genstr())#binop. but depends on func. cannot blindly say sqli vuln
     c.execute(b)#name
     c.execute("SELECT username, rank FROM users WHERE rank = "+rank)#binop
+    c.execute(genstr(rank))
 
     c.execute("SELECT username, rank FROM users WHERE rank = '%s'", (rank,))#parameterised/tuple in ast. Not sql vulnerable
     c.execute("insert into user(username, password)"
