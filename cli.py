@@ -15,6 +15,7 @@ def find_vuln_nodes(tree,l):
 
         if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute):
             if node.func.attr=="system":
+                # print("node.args:",node.args,node.lineno)
                 for i in node.args:
                     if check(i,tree):
 
@@ -86,7 +87,35 @@ def check_if(tree,l):
     for node in ast.walk(tree):
 
         if isinstance(node,ast.If):
+            possible={}
             # print(node.lineno,node.body)
+            test=node.test
+            if isinstance(test,ast.BoolOp):
+                values=test.values
+                for i in values:
+                    if isinstance(i,ast.Compare):
+                        for j in i.comparators:
+                            if isinstance(j,ast.Name):
+                                possible[j.id]=1
+                        if isinstance(i.left,ast.Name):
+                            possible[i.left.id]=1
+
+                    
+            elif isinstance(test,ast.Compare):
+                for j in test.comparators:
+                    if isinstance(j,ast.Name):
+                        possible[j.id]=1
+                if isinstance(test.left,ast.Name):
+                    possible[test.left.id]=1
+                
+
+
+            # print(possible)
+                
+
+                # print(values)
+
+
 
             for i in node.body:
                 # print("\t",i.lineno,i)
@@ -94,7 +123,29 @@ def check_if(tree,l):
                     # print("\t",i.lineno,i)
                     if i.value.func.attr=="system":
                         # print("\t",i.lineno,i)
-                        d[i.value]=1
+                        d[i.value]=2
+                        temp=i.value.args[0]
+                        if isinstance(temp , ast.Call) and isinstance(temp.func,ast.Attribute) and temp.func.attr=="format" :
+
+                            for j in temp.args:
+                                if isinstance(j,ast.Name) and j.id in possible:
+                                    d[i.value]=1
+                        elif isinstance(temp,ast.BinOp) and (isinstance(temp.op,ast.Mod) or isinstance(temp.op,ast.Add)):
+                            if isinstance(temp.right,ast.Name) and temp.right.id in possible:
+                                d[i.value]=1
+
+                        
+
+
+
+
+
+
+
+
+
+                        
+
 
     return d
 
@@ -107,10 +158,13 @@ if __name__=="__main__":
     d=check_if(tree,l)
     for i in l:
         if i in d:
-            print(i.lineno,i)
+            if d[i]==1:
+                print("*Medium*",i.lineno,i)
+            elif d[i]==2:
+                print("*High*",i.lineno,i)
 
         else:
-            print("Warning. No input validation/sanitation done:",i.lineno,i)
+            print("*Critical*. No input validation/sanitation done:",i.lineno,i)
     
         
 

@@ -64,8 +64,8 @@ def list_users():
     # a="SELECT username, rank FROM users WHERE rank = admin" 
     b=a
     def genstr(rank="admin"):
-        # return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
-        return  "asdf"
+        return "SELECT username, rank FROM users WHERE rank = '{0}'".format(rank)
+        # return  "asdf"
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format(rank))#call
     c.execute("SELECT username, rank FROM users WHERE rank = '{0}'".format("user"))#call
     c.execute("SELECT username, rank FROM users WHERE rank = %s and username=%s" %(genstr(),rank))#binop
