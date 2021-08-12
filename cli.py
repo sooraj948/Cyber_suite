@@ -1,3 +1,5 @@
+#similar to sqli.py
+
 import ast
 import sys
 
@@ -82,12 +84,12 @@ def check(i,tree):
     
     return False
 
-def check_if(tree,l):
+def check_if(tree,l):# this is a crude function to check if there has been some input sanitization or not
     d={}
     for node in ast.walk(tree):
 
         if isinstance(node,ast.If):
-            possible={}
+            possible={}#adds the operands to the dict
             # print(node.lineno,node.body)
             test=node.test
             if isinstance(test,ast.BoolOp):
@@ -117,22 +119,22 @@ def check_if(tree,l):
 
 
 
-            for i in node.body:
+            for i in node.body:#checks if the same operand is in query string and in if condition using the 'possible' dict
                 # print("\t",i.lineno,i)
                 if isinstance(i,ast.Expr) and isinstance(i.value,ast.Call) and isinstance(i.value.func,ast.Attribute):
                     # print("\t",i.lineno,i)
                     if i.value.func.attr=="system":
                         # print("\t",i.lineno,i)
-                        d[i.value]=2
+                        d[i.value]=2#for High severity
                         temp=i.value.args[0]
                         if isinstance(temp , ast.Call) and isinstance(temp.func,ast.Attribute) and temp.func.attr=="format" :
 
                             for j in temp.args:
                                 if isinstance(j,ast.Name) and j.id in possible:
-                                    d[i.value]=1
+                                    d[i.value]=1#medium Severity
                         elif isinstance(temp,ast.BinOp) and (isinstance(temp.op,ast.Mod) or isinstance(temp.op,ast.Add)):
                             if isinstance(temp.right,ast.Name) and temp.right.id in possible:
-                                d[i.value]=1
+                                d[i.value]=1#medium severity
 
                         
 
