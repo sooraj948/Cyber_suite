@@ -1,5 +1,10 @@
 #similar to sqli.py
 
+#Assumption: Here I am not considering the functions from subprocess module like run() and Popen.
+#Reasons:
+# 1. They are complex in that the command can be both a string or a list . Also many extra arguements/parameters can be given
+# 2. Most places like tutorials for hacking challenges use the os.system(). the os module also seems perfectly functional to me.
+
 import ast
 import sys
 
@@ -16,7 +21,7 @@ def find_vuln_nodes(tree,l):
     for node in ast.walk(tree):
 
         if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute):
-            if node.func.attr=="system":
+            if node.func.attr=="system":#os.system("<Cmd executed on shell>")
                 # print("node.args:",node.args,node.lineno)
                 for i in node.args:
                     if check(i,tree):
