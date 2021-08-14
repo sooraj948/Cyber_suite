@@ -14,7 +14,10 @@ import sys
 
 
 def create_ast(file):#creates the abstract syntax tree of a python prog
-    test_code=open(file,"r").read()
+    try:
+        test_code=open(file,"r").read()
+    except:
+        raise(Exception("Couldn't open file. May not exist"))
 
     tree=ast.parse(test_code)
     # print(ast.dump(tree))
