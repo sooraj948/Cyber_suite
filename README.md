@@ -38,6 +38,7 @@ python3 encrypt.py option cipher key data
 
 Eg:
 <code>python3 encrypt.py -s rot 13 sooraj</code>
+<code>python3 encrypt.py -s vignere gold sooraj</code>
 
 option: -s or -f to input direct string or input file contaning text
 
@@ -70,9 +71,13 @@ option:
 
 cipher:
 1. rot: Caesar cipher. If key is unknown then all 26 possible rotations are tried and displayed. Left to user to take the text that makes sense.
+
+<code>python3 decrypt.py -s rot fbbenw</code>
+
 2. monoalph: Monoalphabetic substitution cipher where each letter is mpped to some other random letter. There is no standard offset like in caesar cipher. For this frequency analysis is used . This needs a bitmore interaction and attention from user using their knowledge of English and using some context.Lets take an example...
 
-In test2.txt there is some text I had written in the start of sem1. It is composed of only English alphabets. test7.txt has this text but in  encrypted form. 
+In test2.txt there is some text I had written in the start of sem1. It is composed of only English alphabets. test7.txt has this text but in  encrypted form.
+
 <code>python3 decrypt.py -f monoalph test7.txt</code>
 
 We first see the original file contents and then *s  and then the first iteration of decrypted text, This still seems weird but upon closer inspection we can see the word 'tre' and can make an educated guess that it has to be 'the' . So we then change the mapping of 'g' which initially mapped to 'r' to now map to 'h'.
@@ -93,11 +98,33 @@ After a few iterations of this we get this:
 ![Alt text](./Cybersuite3.PNG?raw=true "After few iterations")
 
 Using some common sense and educated guesses we can undersatnd what is written. 
-"Due to the coronavirus pandemic most institutions have gone virtual....". If full decryption(if something liek flag/password is needed ) is wanted then few more iterations will reveal the decrypted text
+"Due to the coronavirus pandemic most institutions have gone virtual....". If full decryption(if something like flag/password is needed ) is wanted then few more iterations will reveal the decrypted text
 
 https://overthewire.org/wargames/krypton/krypton3.html
 
 https://axcheron.github.io/writeups/otw/krypton/
+
+Note : It is quite a cumbersome process , I know :(. But frequency analysis is unfortunately not very accurate except for the first few letters like 'e' and 't'. Thats why finding 'the' is probably the best first step. Again large amounts of text are needed for decryption.
+
+
+vignere: if only keylength is known then it tries to guess the keyword using frequency analysis on letters which are at a distance of 1 keylength.
+
+eg: <code>python3 decrypt.py -fK vignere 4 test5.txt</code>
+
+![Alt text](./Cybersuite4.PNG?raw=true "Decrypted vignere")
+
+Eg: <code>python3 decrypt.py -fk vignere gold test5.txt</code>
+    <code>python3 decrypt.py -sk vignere gold yczugx</code>
+
+
+
+
+
+
+
+
+
+
 
 
 
