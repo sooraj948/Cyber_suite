@@ -19,7 +19,8 @@ The tools I was finally able to accomplish was not as vast I had imagined but I 
 
 ## Converter
 
-python3 converter.py <coversion> <value_to_be_converted>
+python3 converter.py conversion value_to_be_converted
+Eg:
 <code>
 python3 converter.py hex-dec ff
 <code>
