@@ -80,6 +80,30 @@ We first see the original file contents and then *s  and then the first iteratio
 ![Alt text](./Cybersuite1.PNG?raw=true "Change mapping in monoalphabetic substitution")
 
 
+We then see the second iteration of decrypted text. 
+![Alt text](./Cybersuite2.PNG?raw=true "2nd iteration")
+
+We see word 'the' appearing correctly. Now there are more words that are wrong by just 1 letter like 'hsve'->'have' , 'everg':'every', etc. 
+Changing the mapping of 'j' to 'a' instead of 'j' mapping to 's' the text becomes even more understandable.
+
+Keep proceeding in this way to decrypt it fully.
+
+After a few iterations of this we get this:
+
+![Alt text](./Cybersuite3.PNG?raw=true "After few iterations")
+
+Using some common sense and educated guesses we can undersatnd what is written. 
+"Due to the coronavirus pandemic most institutions have gone virtual....". If full decryption(if something liek flag/password is needed ) is wanted then few more iterations will reveal the decrypted text
+
+https://overthewire.org/wargames/krypton/krypton3.html
+
+https://axcheron.github.io/writeups/otw/krypton/
+
+
+
+
+
+
 
 
 
