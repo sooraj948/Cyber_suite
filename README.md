@@ -22,13 +22,12 @@ The tools I was finally able to accomplish was not as vast I had imagined but I 
 python3 converter.py conversion value_to_be_converted
 
 Eg:
-<>
-python3 converter.py hex-dec ff
-<>
+<code>python3 converter.py hex-dec ff</code>
+
 
 conversion arguement is of the form datatype1-datatype2(asc,hex,dec,bin)
 
-Eg: hex-asc, dec-bin, asc-bin. All 12 combination are allowed
+Eg: hex-asc, dec-bin, asc-bin.... All 12 combination are allowed
 
 Note: Hex values cannot have upper case letters. So A3 is not allowed. Instead use a3.
 
@@ -38,20 +37,55 @@ Note: Hex values cannot have upper case letters. So A3 is not allowed. Instead u
 python3 encrypt.py option cipher key data
 
 Eg:
-<>
-python3 encrypt.py -s rot 13 sooraj
-<>
+<code>python3 encrypt.py -s rot 13 sooraj</code>
 
 option: -s or -f to input direct string or input file contaning text
 
 cipher: rot(caesar) or vignere
 
 key: For rot it has to be a number and for vignere it has to be a small word.
+
 https://www.geeksforgeeks.org/vigenere-cipher/
+
 https://en.wikipedia.org/wiki/Caesar_cipher
 
 
 data : if -s then a string has to be given. If -f then name of file has to be given
+
+
+## Decrypter
+
+Broadly speaking there are 2 types of decryption here: where key is known and where key is not known. In the latter case we will try to guess using some user based input and some brute forcing. Examples will hopefully make it clearer.
+
+python3 decrypt.py option cipher data
+
+<code>python3 decrypt.py -sk rot 13 fbbenw</code>
+
+option: 
+1. -s : if key is unknown and data is a string given directly
+2. -sk: key is known and data is a string given directly. for rot key is a number and vignere it is a word/string
+3. -sK: specifically for vignere where only keyword length is known but key itself is unknown. Works best for small keywords and large data. Use -fK instead.
+
+4. Similar where input is a file except change s to f. So -f,-fk,-fK.
+
+cipher:
+1. rot: Caesar cipher. If key is unknown then all 26 possible rotations are tried and displayed. Left to user to take the text that makes sense.
+2. monoalph: Monoalphabetic substitution cipher where each letter is mpped to some other random letter. There is no standard offset like in caesar cipher. For this frequency analysis is used . This needs a bitmore interaction and attention from user using their knowledge of English and using some context.Lets take an example...
+
+In test2.txt there is some text I had written in the start of sem1. It is composed of only English alphabets. test7.txt has this text but in  encrypted form. 
+<code>python3 decrypt.py -f monoalph test7.txt</code>
+
+We first see the original file contents and then *s  and then the first iteration of decrypted text, This still seems weird but upon closer inspection we can see the word 'tre' and can make an educated guess that it has to be 'the' . So we then change the mapping of 'g' which initially mapped to 'r' to now map to 'h'.
+
+![Alt text](./Cybersuite1.PNG?raw=true "Change mapping in monoalphabetic substitution")
+
+
+
+
+
+
+
+
 
 
 
