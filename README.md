@@ -20,10 +20,42 @@ The tools I was finally able to accomplish was not as vast I had imagined but I 
 ## Converter
 
 python3 converter.py conversion value_to_be_converted
+
 Eg:
 <code>
 python3 converter.py hex-dec ff
 <code>
+
+conversion arguement is of the form datatype1-datatype2(asc,hex,dec,bin)
+
+Eg: hex-asc, dec-bin, asc-bin. All 12 combination are allowed
+
+Note: Hex values cannot have upper case letters. So A3 is not allowed. Instead use a3.
+
+
+## Encrypter
+
+python3 encrypt.py option cipher key data
+
+Eg:
+<code>
+python3 encrypt.py -s rot 13 sooraj
+<code>
+
+option: -s or -f to input direct string or input file contaning text
+
+cipher: rot(caesar) or vignere
+
+key: For rot it has to be a number and for vignere it has to be a small word.
+https://www.geeksforgeeks.org/vigenere-cipher/
+https://en.wikipedia.org/wiki/Caesar_cipher
+
+
+data : if -s then a string has to be given. If -f then name of file has to be given
+
+
+
+
 
 
 
