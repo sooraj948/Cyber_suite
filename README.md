@@ -22,9 +22,9 @@ The tools I was finally able to accomplish was not as vast I had imagined but I 
 python3 converter.py conversion value_to_be_converted
 
 Eg:
-<code>
+<>
 python3 converter.py hex-dec ff
-<code>
+<>
 
 conversion arguement is of the form datatype1-datatype2(asc,hex,dec,bin)
 
@@ -38,9 +38,9 @@ Note: Hex values cannot have upper case letters. So A3 is not allowed. Instead u
 python3 encrypt.py option cipher key data
 
 Eg:
-<code>
+<>
 python3 encrypt.py -s rot 13 sooraj
-<code>
+<>
 
 option: -s or -f to input direct string or input file contaning text
 
