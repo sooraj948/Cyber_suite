@@ -113,8 +113,56 @@ eg: <code>python3 decrypt.py -fK vignere 4 test5.txt</code>
 
 ![Alt text](./Cybersuite4.PNG?raw=true "Decrypted vignere")
 
-Eg: <code>python3 decrypt.py -fk vignere gold test5.txt</code>
+Eg: <code>python3 decrypt.py -fk vignere gold test5.txt</code>,
     <code>python3 decrypt.py -sk vignere gold yczugx</code>
+
+
+Note: As in encryption non alphabetic characters are ignored and upper case letters are converted to lower case for ease of decryption.
+
+
+## Static Analysis
+
+python3 static_analysis.py file1.py file2.py file3.py.....
+
+<code>python3 static_analysis.py test.py</code>
+
+Goes through all the python files given and displays line numbers which have code that might be sql injection and command line injection vulnerable.
+
+For sqli it just sequentially lists the line numbers .
+
+For command injection it divides the severity ino 3 categories:
+1. Critical: Where no input validation/sanitation is done. This is terrible and can be exploited.
+2. High
+3. Medium: Where some input validation is detected but command injection it is still possible.
+
+Here I have taken the side of caution so number of false positives might be a bit high and 'Medium' and 'High' sometimes don't make sense.
+It was really hard to accurately verify what was being checked in the if conditions, due to the variability involved in the condition checking process.
+
+https://deepsource.io/blog/introduction-static-code-analysis/
+
+https://rushter.com/blog/detecting-sql-injections-in-python/
+
+https://greentreesnakes.readthedocs.io/en/latest/tofrom.html
+
+https://blog.securityinnovation.com/blog/2011/06/how-to-test-for-command-injection.html
+
+# Conclusion
+
+In the end I can say that it realy was a fun project and I got to learn a lot in the process. The Abstract Syntax Tree part was probably the most challenging part. But once I understood it , after reading the doc , I found it extremely powerful. Now I feel I can analyze python code for various things using this ast module. Again I reiterate there are many online and open source tools that do this quite efficiently, but I took up this project up so that I could build a fast ,offline, command line suite of tools that could maybe do the same job. 
+
+# Future Developments/Scope
+
+1. Enhance Static Analysis to detect other vulnerabilities like xss for javascript,etc.
+2. Build tools that can automate Buffer Overflow , Password bruteforcing  and so on.(These are outside my skill level right now I think)
+3. Add more ciphers for encryption and decryption.
+
+There's always more to do!
+ 
+
+
+
+
+
 
 
 

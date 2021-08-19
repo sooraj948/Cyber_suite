@@ -15,7 +15,7 @@ try:
             print(i.lineno)
         
 
-        print("Lines which might be vulnerable to Command line injection")
+        print("****************\nLines which might be vulnerable to Command line injection")
 
         m=cli.find_vuln_nodes(tree,[])
         d=cli.check_if(tree,l)
