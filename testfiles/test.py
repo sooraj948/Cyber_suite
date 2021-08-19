@@ -13,6 +13,7 @@ import sqlite3
 import hashlib
 
 from flask import Flask, request
+import os
 
 app = Flask(__name__)
 
@@ -87,6 +88,29 @@ def list_users():
     # c.execute("SELECT * FROM TEST WHERE ID = '%s'" % id)
     data = c.fetchall()
     return str(data)
+
+def genstr(rank="admin"):
+    return "test.txt {}".format(rank)
+    # return  "asdf"
+a=input()
+
+os.system("cat {}".format(a))
+os.system("cat "+(a))
+b="rand test"
+if(";" not in a or "||" not in a and a or 1):
+    if ("; " in a):
+        os.system("cat %s"%a)
+    elif(a):
+        os.system("cat {}".format(a))
+    print("random print for testing")
+    b=10
+
+
+os.system("ls %s"%a)
+# a=""
+# os.system("cat {}".format(a))
+# os.system("ls %s"%a)
+
 
 
 if __name__ == '__main__':

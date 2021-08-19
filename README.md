@@ -38,7 +38,7 @@ python3 encrypt.py option cipher key data
 
 Eg:
 <code>python3 encrypt.py -s rot 13 sooraj</code>
-<code>python3 encrypt.py -s vignere gold sooraj</code>
+<code>python3 encrypt.py -f vignere gold testfiles/test2.txt</code>
 
 option: -s or -f to input direct string or input file contaning text
 
@@ -78,15 +78,15 @@ cipher:
 
 In test2.txt there is some text I had written in the start of sem1. It is composed of only English alphabets. test7.txt has this text but in  encrypted form.
 
-<code>python3 decrypt.py -f monoalph test7.txt</code>
+<code>python3 decrypt.py -f monoalph testfiles/test7.txt</code>
 
 We first see the original file contents and then *s  and then the first iteration of decrypted text, This still seems weird but upon closer inspection we can see the word 'tre' and can make an educated guess that it has to be 'the' . So we then change the mapping of 'g' which initially mapped to 'r' to now map to 'h'.
 
-![Alt text](./Cybersuite1.PNG?raw=true "Change mapping in monoalphabetic substitution")
+![Alt text](testfiles/Cybersuite1.PNG?raw=true "Change mapping in monoalphabetic substitution")
 
 
 We then see the second iteration of decrypted text. 
-![Alt text](./Cybersuite2.PNG?raw=true "2nd iteration")
+![Alt text](testfiles/Cybersuite2.PNG?raw=true "2nd iteration")
 
 We see word 'the' appearing correctly. Now there are more words that are wrong by just 1 letter like 'hsve'->'have' , 'everg':'every', etc. 
 Changing the mapping of 'j' to 'a' instead of 'j' mapping to 's' the text becomes even more understandable.
@@ -95,7 +95,7 @@ Keep proceeding in this way to decrypt it fully.
 
 After a few iterations of this we get this:
 
-![Alt text](./Cybersuite3.PNG?raw=true "After few iterations")
+![Alt text](testfiles/Cybersuite3.PNG?raw=true "After few iterations")
 
 Using some common sense and educated guesses we can undersatnd what is written. 
 "Due to the coronavirus pandemic most institutions have gone virtual....". If full decryption(if something like flag/password is needed ) is wanted then few more iterations will reveal the decrypted text
@@ -111,9 +111,9 @@ vignere: if only keylength is known then it tries to guess the keyword using fre
 
 eg: <code>python3 decrypt.py -fK vignere 4 test5.txt</code>
 
-![Alt text](./Cybersuite4.PNG?raw=true "Decrypted vignere")
+![Alt text](testfiles/Cybersuite4.PNG?raw=true "Decrypted vignere")
 
-Eg: <code>python3 decrypt.py -fk vignere gold test5.txt</code>,
+Eg: <code>python3 decrypt.py -fk vignere gold testfiles/test5.txt</code>,
     <code>python3 decrypt.py -sk vignere gold yczugx</code>
 
 
@@ -124,7 +124,7 @@ Note: As in encryption non alphabetic characters are ignored and upper case lett
 
 python3 static_analysis.py file1.py file2.py file3.py.....
 
-<code>python3 static_analysis.py test.py</code>
+<code>python3 static_analysis.py testfiles/test.py</code>
 
 Goes through all the python files given and displays line numbers which have code that might be sql injection and command line injection vulnerable.
 
