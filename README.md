@@ -110,7 +110,8 @@ https://axcheron.github.io/writeups/otw/krypton/
 Note : It is quite a cumbersome process , I know :(. But frequency analysis is unfortunately not very accurate except for the first few letters like 'e' and 't'. Thats why finding 'the' is probably the best first step. Again large amounts of text are needed for decryption.
 
 
-vignere: if only keylength is known then it tries to guess the keyword using frequency analysis on letters which are at a distance of 1 keylength.
+
+3. vignere: if only keylength is known then it tries to guess the keyword using frequency analysis on letters which are at a distance of 1 keylength.
 
 eg: <code>python3 decrypt.py -fK vignere 4 test5.txt</code>
 
@@ -133,7 +134,7 @@ Goes through all the python files given and displays line numbers which have cod
 
 For sqli it just sequentially lists the line numbers .
 
-For command injection it divides the severity ino 3 categories:
+For command injection it divides the severity into 3 categories:
 1. Critical: Where no input validation/sanitation is done. This is terrible and can be exploited.
 2. High
 3. Medium: Where some input validation is detected but command injection it is still possible.
@@ -156,7 +157,7 @@ In the end I can say that it realy was a fun project and I got to learn a lot in
 # Future Developments/Scope
 
 1. Enhance Static Analysis to detect other vulnerabilities like xss for javascript,etc.
-2. Build tools that can automate Buffer Overflow , Password bruteforcing  and so on.(These are outside my skill level right now I think)
+2. Build tools that can automate Buffer Overflow , Password bruteforcing  and so on.
 3. Add more ciphers for encryption and decryption.
 
 There's always more to do!
