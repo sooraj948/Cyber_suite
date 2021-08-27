@@ -13,6 +13,7 @@ The tools I was finally able to accomplish was not as vast I had imagined but I 
 # Modules used
 1. sys: For command line arguements
 2. ast: Abstract Syntax Tree used for static code analysis
+3. base64: For conversion purposes
 * No special installation of modules required
 
 # Usage
@@ -27,7 +28,9 @@ Eg:
 
 conversion arguement is of the form datatype1-datatype2(asc,hex,dec,bin)
 
-Eg: hex-asc, dec-bin, asc-bin.... All 12 combination are allowed
+Eg: hex-asc, dec-bin, asc-bin.... All 12 combination are allowed.
+
+I have also added b64-asc and asc-b64(base 64 encoding and decoding) as it seems very commonplace in hacking challenges.
 
 Note: Hex values cannot have upper case letters. So A3 is not allowed. Instead use a3.
 

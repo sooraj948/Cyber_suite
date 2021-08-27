@@ -1,5 +1,6 @@
 #this program converts from from one form to another. eg-hex to dec or ascii to bin
 import sys
+import base64
 
 
 try:
@@ -38,6 +39,15 @@ try:
             for j in n:
                 print((ord(j)),end=" ")
             print("\n")
+    elif t=="asc-b64":
+        # og=b" ".join(sys.argv[2:])
+        og=bytes(" ".join(sys.argv[2:]),"utf-8")
+        # print(type(og))
+        encoded=base64.b64encode(og)
+        print(encoded)
+        # print(base64.b64encode(base64.b64decode(base64.b64encode(og))))
+
+
 
 
     elif t=="dec-bin":
@@ -74,6 +84,8 @@ try:
         for i in range(2,len(sys.argv)):
             n=sys.argv[i]
             print(hex(int(n,2)),end=" ")
+    elif t=="b64-asc":
+        print(base64.b64decode(" ".join(sys.argv[2:])))
 
     else:
 
